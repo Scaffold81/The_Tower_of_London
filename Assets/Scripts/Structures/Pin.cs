@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TowerOfLondon.Enums;
+using TowerOfLondon.Puzzle;
 
 namespace TowerOfLondon.Structures
 {
@@ -11,6 +12,6 @@ namespace TowerOfLondon.Structures
     public class Pin
     {
         public int pinCapacity = 1;
-        public List<RingType> rings = new List<RingType>();
+        public List<RingController> rings = new List<RingController>();
     }
 }

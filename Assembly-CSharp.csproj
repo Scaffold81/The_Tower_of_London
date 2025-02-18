@@ -61,10 +61,16 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.25f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Common\LevelConfigsManager.cs" />
     <Compile Include="Assets\Scripts\Structures\Pin.cs" />
     <Compile Include="Assets\Scripts\Structures\Board.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\PuzzleManager.cs" />
     <Compile Include="Assets\Scripts\Enums\RingType.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\LevelConfig.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\BoardController.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\PinController.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\RingController.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObjects\LevelConfigReposytory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

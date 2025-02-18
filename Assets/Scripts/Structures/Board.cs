@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TowerOfLondon.Structures
 {
@@ -8,8 +9,6 @@ namespace TowerOfLondon.Structures
     [Serializable]
     public class Board
     {
-        public Pin pin1 = new Pin();
-        public Pin pin2 = new Pin();
-        public Pin pin3 = new Pin();
+        public List<Pin> pin = new ();
     }
 }

@@ -6,6 +6,8 @@ namespace TowerOfLondon.Configs
     [CreateAssetMenu(fileName = "LevelConfig", menuName = "Scriptable Objects/LevelConfig")]
     public class LevelConfig : ScriptableObject
     {
+        public int levelIndex;
+
         public int numberOfMoves = 10;
 
         public Board targetBoard = new Board();
