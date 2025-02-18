@@ -1,5 +1,4 @@
 using TowerOfLondon.Enums;
-using TowerOfLondon.Structures;
 using UnityEngine;
 
 namespace TowerOfLondon.Puzzle
@@ -7,13 +6,20 @@ namespace TowerOfLondon.Puzzle
     public class RingController : MonoBehaviour
     {
         private Rigidbody _rb;
-
         private bool isDragging = false;
-
+        [SerializeField]
+        private float _offsetY = 1.2f;
+        
         private Vector3 _startPosition;
-        private Vector3 _offset;
 
-        public RingType RingType { get; private set; }
+        [SerializeField]
+        private RingType _ringType;
+        
+        public RingType RingType
+        {
+            get { return _ringType; }
+            private set { _ringType = value; }
+        }
 
         public bool IsLock { get; set; }
 
@@ -21,7 +27,7 @@ namespace TowerOfLondon.Puzzle
         {
             _rb = GetComponent<Rigidbody>();
         }
-
+        
         /// <summary>
         /// При отсутвии ВР контроллера 
         /// </summary>
@@ -53,7 +59,7 @@ namespace TowerOfLondon.Puzzle
 
                 var worldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
-                transform.position = new Vector3(worldPos.x, worldPos.y, _startPosition.z);
+                transform.position = new Vector3(worldPos.x, worldPos.y * _offsetY, _startPosition.z);
             }
         }
 

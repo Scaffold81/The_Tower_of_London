@@ -3,7 +3,12 @@ guid: c20073b79002c3245a799ac45a50dbbb
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RingMat
+    second: {fileID: 2100000, guid: 8e2ae0787e8b7794dac7ba4941696a5e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -4,8 +4,8 @@ using UnityEngine;
 namespace TowerOfLondon.Configs
 {
     [CreateAssetMenu(fileName = "LevelConfigReposytory", menuName = "Scriptable Objects/LevelConfigReposytory")]
-    public class LevelConfigReposytory : ScriptableObject
+    public class LevelConfigRepository : ScriptableObject
     {
-       public List<LevelConfig> levels;
+        public List<LevelConfig> levels;
     }
 }

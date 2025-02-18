@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TowerOfLondon.Puzzle;
 using TowerOfLondon.Structures;
@@ -8,30 +7,51 @@ public class BoardController : MonoBehaviour
 {
     [SerializeField]
     private List<PinController> _pins;
-
+    private List<GameObject> _rings;
     private PinController _lastPin;
-    private float _offsetY=1.5f;
 
-    void Start()
+    private float _offsetY = 2.5f;
+
+    public void InitializeBoard(Board boardConfig)
     {
-        Initialize();
-    }
-    private void Initialize()
-    {
-        foreach (var pin in _pins)
+        for (int i = 0; i < _pins.Count; i++)
         {
-            pin.Initialize(this);
+            _pins[i].Initialize(this, boardConfig.pin[i].pinCapacity);
+        }
+
+        CreateRingsOnPins(boardConfig);
+    }
+
+    private void CreateRingsOnPins(Board config)
+    {
+        if(_rings != null)
+            foreach (GameObject r in _rings) Destroy(r);
+
+        for (int i = 0; i < config.pin.Count; i++)
+        {
+            if (config.pin[i].rings.Count > 0)
+            {
+                var yOffset = 0.0f;
+                foreach (RingController ring in config.pin[i].rings)
+                {
+                    yOffset += 2;
+                    Instantiate(ring, new Vector3(_pins[i].transform.position.x, _pins[i].transform.position.y + yOffset, _pins[i].transform.position.z), Quaternion.identity);
+                }
+            }
         }
     }
 
-    public void SetLastPin(PinController pinController)
+    public void SetLastPinController(PinController pinController)
     {
-        _lastPin=pinController;
+        _lastPin = pinController;
     }
 
-    public void MoveRingToLastPin(RingController ring)
+    public void MoveRingToLastPinController(RingController ring)
     {
-        ring.transform.position = new Vector3(_lastPin.transform.position.x, _lastPin.transform.position.y * _offsetY, _lastPin.transform.position.z);
+        ring.transform.position = new Vector3(_lastPin.transform.position.x, _lastPin.transform.localScale.y + _offsetY, _lastPin.transform.position.z);
     }
-    
+
+    public void TurnON()
+    {
+    }
 }

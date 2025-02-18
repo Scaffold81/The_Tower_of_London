@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using TowerOfLondon.Structures;
@@ -9,38 +10,35 @@ namespace TowerOfLondon.Puzzle
     {
         private BoardController _boardController;
 
-        [SerializeField]
-        private Pin _pinData;
-        
-        private void Start()
-        {
+        private int _pinCapacity  = 1;
+        private List<RingController> _rings=new();
 
-        }
-
-        public void Initialize(BoardController boardController)
+        public void Initialize(BoardController boardController,int pinCapacity)
         {
+            _pinCapacity = pinCapacity;
             _boardController = boardController;
+            transform.localScale=new Vector3(transform.localScale.x, pinCapacity, transform.localScale.z);
         }
 
         public void AddRing(RingController ring)
         {
-            if (_pinData.rings.Count < _pinData.pinCapacity)
-                _pinData.rings.Add(ring);
+            if (_rings.Count < _pinCapacity)
+                _rings.Add(ring);
             else 
-                _boardController.MoveRingToLastPin(ring);
+                _boardController.MoveRingToLastPinController(ring);
         }
 
         public void RemoveRing(RingController ring)
         {
-            if (_pinData.rings.Count > 0)
-                _pinData.rings.Remove(ring);
+            if (_rings.Count > 0)
+                _rings.Remove(ring);
         }
 
         private void LockRing()
         {
-            RingController lastRing = _pinData.rings.LastOrDefault();
+            RingController lastRing = _rings.LastOrDefault();
 
-            foreach (RingController ring in _pinData.rings)
+            foreach (RingController ring in _rings)
             {
                 if (ring != lastRing)
                     ring.IsLock = true;
@@ -71,11 +69,10 @@ namespace TowerOfLondon.Puzzle
             {
                 //Добавляем кольцо стержню
                 RemoveRing(ring);
-                LockRing();
-               _boardController.SetLastPin(this);
+                LockRing(); 
+                _boardController.TurnON();
+                _boardController.SetLastPinController(this);
             }
-           
-
         }
     }
 }

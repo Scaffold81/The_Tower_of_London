@@ -68,7 +68,7 @@ GameObject:
   - component: {fileID: 2359077308104447642}
   - component: {fileID: 3710500163747365176}
   m_Layer: 0
-  m_Name: Ring
+  m_Name: RingRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -124,7 +124,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -1490506805320374086, guid: c20073b79002c3245a799ac45a50dbbb, type: 3}
+  - {fileID: 2100000, guid: 088491b7fbc0179478103e80ca131d05, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -176,9 +176,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2901138582730644943}
   serializedVersion: 4
-  m_Mass: 10
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 100
+  m_Drag: 1
+  m_AngularDrag: 1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -207,6 +207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a803fae328ab7441a215b58712913ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _offsetY: 1.2
+  _ringType: 0
 --- !u!1 &3334583672306267578
 GameObject:
   m_ObjectHideFlags: 0

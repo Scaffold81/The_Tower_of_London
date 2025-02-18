@@ -12,24 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03863ce7f35c2984b9f08f04de1f198d, type: 3}
   m_Name: LevelConfig01
   m_EditorClassIdentifier: 
+  levelIndex: 1
   numberOfMoves: 20
   targetBoard:
-    pin1:
-      pinCapacity: 3
-      rings: 000000000200000000000000
-    pin2:
-      pinCapacity: 2
-      rings: 
-    pin3:
-      pinCapacity: 1
-      rings: 
+    pin:
+    - pinCapacity: 3
+      rings:
+      - {fileID: 3710500163747365176, guid: 76a5a0ee2ffc7b448bc2ea8fd956076a, type: 3}
+      - {fileID: 3710500163747365176, guid: 216149c23a7122641888a36a0293b529, type: 3}
+      - {fileID: 3710500163747365176, guid: 216149c23a7122641888a36a0293b529, type: 3}
+    - pinCapacity: 2
+      rings: []
+    - pinCapacity: 1
+      rings: []
   gameBoard:
-    pin1:
-      pinCapacity: 3
-      rings: 00000000
-    pin2:
-      pinCapacity: 2
-      rings: 00000000
-    pin3:
-      pinCapacity: 1
-      rings: 02000000
+    pin:
+    - pinCapacity: 3
+      rings:
+      - {fileID: 3710500163747365176, guid: 216149c23a7122641888a36a0293b529, type: 3}
+    - pinCapacity: 2
+      rings:
+      - {fileID: 3710500163747365176, guid: 216149c23a7122641888a36a0293b529, type: 3}
+    - pinCapacity: 1
+      rings:
+      - {fileID: 3710500163747365176, guid: 76a5a0ee2ffc7b448bc2ea8fd956076a, type: 3}
