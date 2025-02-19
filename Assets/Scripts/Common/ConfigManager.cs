@@ -25,11 +25,6 @@ namespace TowerOfLondon.Common
                 Instance = this;
         }
 
-        private void Start()
-        {
-            print(_defaultConfig.name);
-        }
-
         public LevelConfig GetConfig(int levelIndex)
         {
             var levelConfig = _levelConfigRepository.levels.FirstOrDefault(a => a.levelIndex == levelIndex);

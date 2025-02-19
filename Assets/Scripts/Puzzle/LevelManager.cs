@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TowerOfLondon.Common;
 using TowerOfLondon.Configs;
 using TowerOfLondon.Structures;
@@ -10,6 +11,7 @@ namespace TowerOfLondon.Puzzle
     {
         private int _levelIndex = 0;
         private int _turns;
+        private int _turn;
 
         private LevelConfig _levelConfig;
         [SerializeField]
@@ -17,6 +19,17 @@ namespace TowerOfLondon.Puzzle
         [SerializeField]
         private BoardController _player;
 
+        public int Turn
+        {
+            get { return _turn; }
+            set
+            {
+                _turn = value;
+                CheckWin();
+                if (value >= _turns)
+                    Lose();
+            }
+        }
         private void Start()
         {
             NewLevel();
@@ -27,20 +40,81 @@ namespace TowerOfLondon.Puzzle
             board.InitializeBoard(config);
         }
 
-        private LevelConfig GetLevelConfig(int value)
+        private void GetLevelConfig(int value)
         {
-            return ConfigManager.Instance.GetConfig(value);
+            _levelConfig = ConfigManager.Instance.GetConfig(value);
         }
 
+        private void OnEnable()
+        {
+            _player.TurnOn += SetTurn;
+        }
+
+        private void OnDisable()
+        {
+            _player.TurnOn -= SetTurn;
+        }
+
+        private void SetTurn()
+        {
+            Turn++;
+        }
+
+        private void CheckWin()
+        {
+            bool allRingsMatch = false;
+
+            for (int i = 0; i < _player.Pins.Count; i++)
+            {
+                if (_player.Pins[i].Rings.Count == _levelConfig.targetBoard.pin[i].rings.Count&& _player.Pins[i].Rings.Count>0)
+                {
+                     var playerRingTypes = _player.Pins[i].Rings.Select(ring => ring.RingType);
+                     var targetRingTypes = _levelConfig.targetBoard.pin[i].rings.Select(ring => ring.RingType);
+
+                     Debug.Log("playerRingTypes " + playerRingTypes.Count() + " targetRingTypes " + _levelConfig.targetBoard.pin[i].rings.Count + " pin "+i);
+
+                     if (playerRingTypes.SequenceEqual(targetRingTypes))
+                     {
+                         allRingsMatch = true;
+                        break;
+                     }
+                }
+            }
+
+            if (allRingsMatch)
+            {
+
+                Win();
+            }
+        }
+
+        private void Win()
+        {
+            CloseLevel();
+            Debug.Log("All rings match. Player wins!");
+        }
+
+        private void Lose()
+        {
+            CloseLevel();
+            Debug.Log("Player lose!");
+        }
+        
         public void NewLevel()
         {
             _levelIndex += 1;
-            _levelConfig = GetLevelConfig(_levelIndex);
+            GetLevelConfig(_levelIndex);
 
             _turns = _levelConfig.numberOfMoves;
 
             InitBoard(_target, _levelConfig.targetBoard);
             InitBoard(_player, _levelConfig.gameBoard);
+        }
+
+        private void CloseLevel()
+        {
+            _target.ClearRings();
+            _player.ClearRings();
         }
     }
 }

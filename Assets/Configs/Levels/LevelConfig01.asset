@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: LevelConfig01
   m_EditorClassIdentifier: 
   levelIndex: 1
-  numberOfMoves: 20
+  numberOfMoves: 10
   targetBoard:
     pin:
     - pinCapacity: 3
       rings:
-      - {fileID: 3710500163747365176, guid: 76a5a0ee2ffc7b448bc2ea8fd956076a, type: 3}
       - {fileID: 3710500163747365176, guid: 216149c23a7122641888a36a0293b529, type: 3}
+      - {fileID: 3710500163747365176, guid: 76a5a0ee2ffc7b448bc2ea8fd956076a, type: 3}
       - {fileID: 3710500163747365176, guid: 216149c23a7122641888a36a0293b529, type: 3}
     - pinCapacity: 2
       rings: []

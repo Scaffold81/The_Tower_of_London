@@ -1,3 +1,4 @@
+using TowerOfLondon.Audio;
 using TowerOfLondon.Enums;
 using UnityEngine;
 
@@ -9,12 +10,12 @@ namespace TowerOfLondon.Puzzle
         private bool isDragging = false;
         [SerializeField]
         private float _offsetY = 1.2f;
-        
+
         private Vector3 _startPosition;
 
         [SerializeField]
         private RingType _ringType;
-        
+
         public RingType RingType
         {
             get { return _ringType; }
@@ -22,12 +23,15 @@ namespace TowerOfLondon.Puzzle
         }
 
         public bool IsLock { get; set; }
+        
+        public SoundManager Sound { get; private set; }
 
         private void Awake()
         {
+            Sound=GetComponent<SoundManager>();
             _rb = GetComponent<Rigidbody>();
         }
-        
+
         /// <summary>
         /// При отсутвии ВР контроллера 
         /// </summary>

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
-using TowerOfLondon.Structures;
 using UnityEngine;
 
 namespace TowerOfLondon.Puzzle
@@ -10,39 +8,47 @@ namespace TowerOfLondon.Puzzle
     {
         private BoardController _boardController;
 
-        private int _pinCapacity  = 1;
-        private List<RingController> _rings=new();
+        private int _pinCapacity = 1;
+        private List<RingController> _rings = new();
 
-        public void Initialize(BoardController boardController,int pinCapacity)
+        public List<RingController> Rings 
+        {
+            get{ return _rings; }
+            private set{ _rings = value; }
+        }
+
+        public void Initialize(BoardController boardController, int pinCapacity)
         {
             _pinCapacity = pinCapacity;
             _boardController = boardController;
-            transform.localScale=new Vector3(transform.localScale.x, pinCapacity, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, pinCapacity, transform.localScale.z);
         }
 
         public void AddRing(RingController ring)
         {
-            if (_rings.Count < _pinCapacity)
-                _rings.Add(ring);
-            else 
+            if (Rings.Count < _pinCapacity)
+                Rings.Add(ring);
+            else
                 _boardController.MoveRingToLastPinController(ring);
+            // После добавления кольца засчитываем ход
+            _boardController.Turn();
         }
 
         public void RemoveRing(RingController ring)
         {
-            if (_rings.Count > 0)
-                _rings.Remove(ring);
+            if (Rings.Count > 0)
+                Rings.Remove(ring);
         }
 
         private void LockRing()
         {
-            RingController lastRing = _rings.LastOrDefault();
+            RingController lastRing = Rings.LastOrDefault();
 
-            foreach (RingController ring in _rings)
+            foreach (RingController ring in Rings)
             {
                 if (ring != lastRing)
                     ring.IsLock = true;
-                else 
+                else
                     ring.IsLock = false;
             }
         }
@@ -53,11 +59,16 @@ namespace TowerOfLondon.Puzzle
 
             if (ring != null)
             {
-                //для красоты. Что бы кольцо всегда одевалось на стержень
-                ring.transform.position = new Vector3(transform.position.x, ring.transform.position.y, transform.position.z);
-                //Добавляем кольцо стержню
-                AddRing(ring);
-                LockRing();
+                if (IsNeighboringPin())
+                {
+                    //для красоты. Что бы кольцо всегда одевалось на стержень
+                    ring.transform.position = new Vector3(transform.position.x, ring.transform.position.y, transform.position.z);
+                    //Добавляем кольцо стержню
+                    AddRing(ring);
+                    LockRing();
+                    ring.Sound.PlaySound();
+
+                }
             }
         }
 
@@ -70,9 +81,21 @@ namespace TowerOfLondon.Puzzle
                 //Добавляем кольцо стержню
                 RemoveRing(ring);
                 LockRing(); 
-                _boardController.TurnON();
                 _boardController.SetLastPinController(this);
+                ring.Sound.PlaySound();
             }
+        }
+
+        /// <summary>
+        /// По примеру ханойских башен кольцо можно переместить только на соседнюю позицию
+        /// </summary>
+        /// <returns></returns>
+        private bool IsNeighboringPin()
+        {
+            int currentIndex = _boardController.Pins.IndexOf(this);
+            int lastPinIndex = _boardController.Pins.IndexOf(_boardController.LastPin);
+
+            return Mathf.Abs(lastPinIndex - currentIndex) == 1;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TowerOfLondon.Puzzle;
 using TowerOfLondon.Structures;
@@ -7,16 +8,26 @@ public class BoardController : MonoBehaviour
 {
     [SerializeField]
     private List<PinController> _pins;
-    private List<GameObject> _rings;
     private PinController _lastPin;
+    private List<GameObject> _rings = new();
 
-    private float _offsetY = 2.5f;
+    private float _offsetY = 3f;
+
+    public Action TurnOn;
+
+    public PinController LastPin { get => _lastPin; set => _lastPin = value; }
+
+    public List<PinController> Pins
+    {
+        get { return _pins; }
+        private set { _pins = value; }
+    }
 
     public void InitializeBoard(Board boardConfig)
     {
-        for (int i = 0; i < _pins.Count; i++)
+        for (int i = 0; i < Pins.Count; i++)
         {
-            _pins[i].Initialize(this, boardConfig.pin[i].pinCapacity);
+            Pins[i].Initialize(this, boardConfig.pin[i].pinCapacity);
         }
 
         CreateRingsOnPins(boardConfig);
@@ -24,8 +35,7 @@ public class BoardController : MonoBehaviour
 
     private void CreateRingsOnPins(Board config)
     {
-        if(_rings != null)
-            foreach (GameObject r in _rings) Destroy(r);
+        ClearRings();
 
         for (int i = 0; i < config.pin.Count; i++)
         {
@@ -34,24 +44,32 @@ public class BoardController : MonoBehaviour
                 var yOffset = 0.0f;
                 foreach (RingController ring in config.pin[i].rings)
                 {
+                    var ringTemp = Instantiate(ring, new Vector3(Pins[i].transform.position.x, Pins[i].transform.localPosition.y + yOffset, Pins[i].transform.position.z), Quaternion.identity);
+                    _rings.Add(ringTemp.gameObject);
                     yOffset += 2;
-                    Instantiate(ring, new Vector3(_pins[i].transform.position.x, _pins[i].transform.position.y + yOffset, _pins[i].transform.position.z), Quaternion.identity);
                 }
             }
         }
     }
 
+    public void ClearRings()
+    {
+        if (_rings != null)
+            foreach (GameObject r in _rings) Destroy(r);
+    }
+
     public void SetLastPinController(PinController pinController)
     {
-        _lastPin = pinController;
+        LastPin = pinController;
     }
 
     public void MoveRingToLastPinController(RingController ring)
     {
-        ring.transform.position = new Vector3(_lastPin.transform.position.x, _lastPin.transform.localScale.y + _offsetY, _lastPin.transform.position.z);
+        ring.transform.position = new Vector3(LastPin.transform.position.x, LastPin.transform.localScale.y + _offsetY, LastPin.transform.position.z);
     }
 
-    public void TurnON()
+    public void Turn()
     {
+        TurnOn();
     }
 }
