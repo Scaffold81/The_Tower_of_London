@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03863ce7f35c2984b9f08f04de1f198d, type: 3}
   m_Name: LevelConfig02
   m_EditorClassIdentifier: 
-  levelIndex: 1
-  numberOfMoves: 10
+  levelIndex: 2
+  numberOfMoves: 15
   targetBoard:
     pin:
     - pinCapacity: 4

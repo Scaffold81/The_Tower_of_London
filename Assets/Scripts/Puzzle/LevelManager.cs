@@ -1,8 +1,10 @@
+using Game.Common;
 using System;
 using System.Linq;
 using TowerOfLondon.Common;
 using TowerOfLondon.Configs;
 using TowerOfLondon.Structures;
+using TowerOfLondon.UI;
 using UnityEngine;
 
 namespace TowerOfLondon.Puzzle
@@ -14,10 +16,11 @@ namespace TowerOfLondon.Puzzle
         private int _turn;
 
         private LevelConfig _levelConfig;
-        [SerializeField]
-        private BoardController _target;
-        [SerializeField]
-        private BoardController _player;
+
+        [SerializeField] private UITextField _turnCounter;
+        [SerializeField] private UIEndLevelPanel _puzzleStatePanel;
+        [SerializeField] private BoardController _target;
+        [SerializeField] private BoardController _player;
 
         public int Turn
         {
@@ -25,11 +28,13 @@ namespace TowerOfLondon.Puzzle
             set
             {
                 _turn = value;
+                _turnCounter.UpdateText(_turn + "/" + _turns);
                 CheckWin();
                 if (value >= _turns)
                     Lose();
             }
         }
+
         private void Start()
         {
             NewLevel();
@@ -66,47 +71,52 @@ namespace TowerOfLondon.Puzzle
 
             for (int i = 0; i < _player.Pins.Count; i++)
             {
-                if (_player.Pins[i].Rings.Count == _levelConfig.targetBoard.pin[i].rings.Count&& _player.Pins[i].Rings.Count>0)
+                if (_player.Pins[i].Rings.Count == _levelConfig.targetBoard.pin[i].rings.Count && _player.Pins[i].Rings.Count > 0)
                 {
-                     var playerRingTypes = _player.Pins[i].Rings.Select(ring => ring.RingType);
-                     var targetRingTypes = _levelConfig.targetBoard.pin[i].rings.Select(ring => ring.RingType);
+                    var playerRingTypes = _player.Pins[i].Rings.Select(ring => ring.RingType);
+                    var targetRingTypes = _levelConfig.targetBoard.pin[i].rings.Select(ring => ring.RingType);
 
-                     Debug.Log("playerRingTypes " + playerRingTypes.Count() + " targetRingTypes " + _levelConfig.targetBoard.pin[i].rings.Count + " pin "+i);
-
-                     if (playerRingTypes.SequenceEqual(targetRingTypes))
-                     {
-                         allRingsMatch = true;
+                    if (playerRingTypes.SequenceEqual(targetRingTypes))
+                    {
+                        allRingsMatch = true;
                         break;
-                     }
+                    }
                 }
             }
 
             if (allRingsMatch)
             {
-
                 Win();
             }
         }
 
         private void Win()
         {
-            CloseLevel();
+            var header = "Победа";
+            var info = $"{DateTime.UtcNow}\nПользователь: Иванов\nУровень: {_levelConfig.levelIndex}\nХодов: {_turn}";
+
+            _puzzleStatePanel.PanelOn(header, info);
+            SaveSystem.SaveData(header, info);
             Debug.Log("All rings match. Player wins!");
         }
 
         private void Lose()
         {
-            CloseLevel();
-            Debug.Log("Player lose!");
+            var header = "Поражение";
+            var info = $"Пользователь: Иванов\nУровень: {_levelConfig.levelIndex}\nХодов: {_turn}";
+
+            _puzzleStatePanel.PanelOn(header, info);
+            SaveSystem.SaveData(header, info);
+            Debug.Log("Player loses!");
         }
-        
+
         public void NewLevel()
         {
-            _levelIndex += 1;
+            _levelIndex++;
             GetLevelConfig(_levelIndex);
 
             _turns = _levelConfig.numberOfMoves;
-
+            Turn = 0;
             InitBoard(_target, _levelConfig.targetBoard);
             InitBoard(_player, _levelConfig.gameBoard);
         }

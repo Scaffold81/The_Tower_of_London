@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TowerOfLondon.Enums;
 using TowerOfLondon.Puzzle;
 
 namespace TowerOfLondon.Structures

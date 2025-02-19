@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class BoardController : MonoBehaviour
 {
-    [SerializeField]
-    private List<PinController> _pins;
+    [SerializeField] private List<PinController> _pins;
     private PinController _lastPin;
     private List<GameObject> _rings = new();
 
@@ -36,7 +35,7 @@ public class BoardController : MonoBehaviour
     private void CreateRingsOnPins(Board config)
     {
         ClearRings();
-
+        ClearPins();
         for (int i = 0; i < config.pin.Count; i++)
         {
             if (config.pin[i].rings.Count > 0)
@@ -44,32 +43,42 @@ public class BoardController : MonoBehaviour
                 var yOffset = 0.0f;
                 foreach (RingController ring in config.pin[i].rings)
                 {
-                    var ringTemp = Instantiate(ring, new Vector3(Pins[i].transform.position.x, Pins[i].transform.localPosition.y + yOffset, Pins[i].transform.position.z), Quaternion.identity);
+                    var ringTemp = Instantiate(ring, new Vector3(Pins[i].transform.position.x, Pins[i].transform.position.y + yOffset, Pins[i].transform.position.z), Quaternion.identity);
                     _rings.Add(ringTemp.gameObject);
+                    Pins[i].Rings.Add(ringTemp);
                     yOffset += 2;
                 }
             }
         }
     }
 
-    public void ClearRings()
+    private void ClearPins()
     {
-        if (_rings != null)
-            foreach (GameObject r in _rings) Destroy(r);
+        foreach (var pin in Pins)
+        {
+            pin.Rings.Clear();
+        }
     }
 
-    public void SetLastPinController(PinController pinController)
+    public void ClearRings()
+    {
+        foreach (var ringObject in _rings)
+        {
+            Destroy(ringObject);
+        }
+        _rings.Clear();
+    }
+
+    public void SetLastPin(PinController pinController)
     {
         LastPin = pinController;
     }
 
-    public void MoveRingToLastPinController(RingController ring)
+    public void MoveRingToLastPin(RingController ring)
     {
-        ring.transform.position = new Vector3(LastPin.transform.position.x, LastPin.transform.localScale.y + _offsetY, LastPin.transform.position.z);
-    }
-
-    public void Turn()
-    {
-        TurnOn();
+        if (LastPin != null)
+        {
+            ring.transform.position = new Vector3(LastPin.transform.position.x, LastPin.transform.localScale.y + _offsetY, LastPin.transform.position.z);
+        }
     }
 }
